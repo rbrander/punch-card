@@ -28,7 +28,13 @@ class App extends React.Component {
 
     // When in the dialog render the report
     if (isInDialog) {
-      return <TimeEntryReport sdk={this.props.sdk} />
+      return (
+        <TimeEntryReport
+          sdk={this.props.sdk}
+          spaceID="5nguzj3e9yeb"
+          environment="master"
+        />
+      );
     }
 
     // Now we know we are in the sidebar

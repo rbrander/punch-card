@@ -1,6 +1,7 @@
 // Dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { appendData, readData } = require('./utils');
 const TimeEntry = require('./time-entry');
 
@@ -8,7 +9,8 @@ const TimeEntry = require('./time-entry');
 const app = express();
 const PORT = 8080;
 
-// Middleware for parsing body string into JSON object
+// Middleware for CORS and parsing body string into JSON object
+app.use(cors());
 app.use(bodyParser.json());
 
 // Handler for accepting new time entry data

@@ -30,12 +30,11 @@ class TimeEntryReport extends React.Component {
     const host = 'http://localhost:8080';
     const queryString = `?spaceID=${spaceID}&environment=${environment}`;
     const url = `${host}/report${queryString}`;
-    /*
     fetch(url)
+      .then(response => response.json())
       .then(response => {
         console.log('response:', response);
       })
-    */
   }
 
   render = () => {
