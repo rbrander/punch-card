@@ -41116,15 +41116,44 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _forma36ReactComponents = require("@contentful/forma-36-react-components");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class TimeEntryReport extends _react.default.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super(...arguments);
+    this.state = {
+      tabId: 'dashboard'
+    };
+
+    this.selectTab = tabId => {
+      this.setState({
+        tabId
+      });
+    };
   }
 
   render() {
-    return _react.default.createElement("div", null, "Hello World!");
+    return _react.default.createElement("div", null, _react.default.createElement(_forma36ReactComponents.Tabs, null, _react.default.createElement(_forma36ReactComponents.Tab, {
+      id: "dashboard",
+      selected: this.state.tabId === 'dashboard',
+      onSelect: () => this.selectTab('dashboard')
+    }, "Dashboard"), _react.default.createElement(_forma36ReactComponents.Tab, {
+      id: "daily",
+      selected: this.state.tabId === 'daily',
+      onSelect: () => this.selectTab('daily')
+    }, "Daily"), _react.default.createElement(_forma36ReactComponents.Tab, {
+      id: "graphs",
+      selected: this.state.tabId === 'graphs',
+      onSelect: () => this.selectTab('graphs')
+    }, "Overview")), this.state.tabId === 'dashboard' && _react.default.createElement(_forma36ReactComponents.TabPanel, {
+      id: "dashboard"
+    }, _react.default.createElement("h1", null, "Dashboard")), this.state.tabId === 'daily' && _react.default.createElement(_forma36ReactComponents.TabPanel, {
+      id: "daily"
+    }, _react.default.createElement("h1", null, "Daily")), this.state.tabId === 'graphs' && _react.default.createElement(_forma36ReactComponents.TabPanel, {
+      id: "graphs"
+    }, _react.default.createElement("h1", null, "Graphs")));
   }
 
 }
@@ -41134,7 +41163,7 @@ TimeEntryReport.propTypes = {
 };
 var _default = TimeEntryReport;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"index.css":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","@contentful/forma-36-react-components":"../node_modules/@contentful/forma-36-react-components/dist/esm/index.js"}],"index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
