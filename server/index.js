@@ -22,7 +22,17 @@ app.post('/time_entry', (req, resp, next) => {
 });
 
 app.get('/report', (req, resp, next) => {
-  const data = readData();
+  const allowedQueryParams = ['userId', 'entryId', 'spaceId', 'environmentId'];
+
+  const raw = readData();
+  const data = allowedQueryParams.reduce((memo, param) => {
+    if (req.query[param]) {
+      return memo.filter(datum => datum[param] === req.query[param]);
+    } else {
+      return memo;
+    }
+  }, raw);
+
   resp
     .status(200)
     .json(data);
