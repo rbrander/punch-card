@@ -17,15 +17,16 @@ class TimeEntryReport extends React.Component {
 
   state = {
     tabId: TAB_DASHBOARD,
-    data: []
+    data: [],
+    userFullName: `${this.props.sdk.user.firstName} ${this.props.sdk.user.lastName}`
   }
 
   selectTab = tabId => this.setState({ tabId })
 
   componentDidMount = () => {
-    const { spaceID, environment } = this.props;
+    const { spaceID, environment, sdk } = this.props;
     const host = 'http://localhost:8080';
-    const queryString = `?spaceID=${spaceID}&environment=${environment}`;
+    const queryString = `?spaceId=${spaceID}&environment=${environment}`;
     const url = `${host}/report${queryString}`;
     fetch(url)
       .then(response => response.json())
@@ -33,10 +34,10 @@ class TimeEntryReport extends React.Component {
   }
 
   render = () => {
-    const { tabId, data } = this.state;
+    const { tabId, data, userFullName } = this.state;
     return (
       <div>
-        <ReportDetails />
+        <ReportDetails name={userFullName} />
         <Tabs>
           <Tab
             id={TAB_DASHBOARD}

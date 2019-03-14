@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ReportDetails = () => (
+const ReportDetails = ({ name }) => (
   <div>
-    <h2>John Doe</h2>
+    <h2>{name}</h2>
   </div>
 );
 

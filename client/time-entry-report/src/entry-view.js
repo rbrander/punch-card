@@ -7,6 +7,8 @@ import {
   TableCell
 } from '@contentful/forma-36-react-components';
 
+const formatDate = (dateISOstring) => new Date(dateISOstring).toLocaleString();
+
 const EntryView = ({ data }) => (
   <div>
     <h3>Entry View</h3>
@@ -19,10 +21,10 @@ const EntryView = ({ data }) => (
         </TableRow>
       </TableHead>
       <TableBody>
-        {data.map(({ entryID, when, timeInSeconds }, idx) => (
+        {data.map(({ entryId, when, timeInSeconds }, idx) => (
           <TableRow key={idx}>
-            <TableCell>{entryID}</TableCell>
-            <TableCell>{when}</TableCell>
+            <TableCell>{entryId}</TableCell>
+            <TableCell>{formatDate(when)}</TableCell>
             <TableCell>{timeInSeconds}</TableCell>
           </TableRow>
         ))}
