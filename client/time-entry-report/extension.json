@@ -1,0 +1,6 @@
+{
+  "id": "time-entry-report",
+  "name": "time-entry-report",
+  "srcdoc": "./build/index.html",
+  "sidebar": true
+}
