@@ -2,7 +2,7 @@ import React from 'react';
 
 const ReportDetails = () => (
   <div>
-    Report for FirstName LastName
+    <h2>John Doe</h2>
   </div>
 );
 

@@ -13,7 +13,7 @@ const TAB_ENTRY_VIEW = 'entry-view';
 class TimeEntryReport extends React.Component {
   static propTypes = {
     sdk: PropTypes.object.isRequired,
-  };
+  }
 
   state = {
     tabId: TAB_DASHBOARD,
@@ -33,7 +33,7 @@ class TimeEntryReport extends React.Component {
   }
 
   render = () => {
-    const { tabId } = this.state;
+    const { tabId, data } = this.state;
     return (
       <div>
         <ReportDetails />
@@ -77,7 +77,7 @@ class TimeEntryReport extends React.Component {
         {
           tabId === TAB_ENTRY_VIEW && (
             <TabPanel id={TAB_ENTRY_VIEW}>
-              <EntryView />
+              <EntryView data={data} />
             </TabPanel>
           )
         }
