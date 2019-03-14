@@ -18,7 +18,9 @@ class TimeEntryReport extends React.Component {
   state = {
     tabId: TAB_DASHBOARD,
     data: [],
-    userFullName: `${this.props.sdk.user.firstName} ${this.props.sdk.user.lastName}`
+    userFullName: `${this.props.sdk.user.firstName} ${this.props.sdk.user.lastName}`,
+    startDate: 'Feb 28, 2019',
+    endDate: 'Mar 14, 2019'
   }
 
   selectTab = tabId => this.setState({ tabId })
@@ -34,10 +36,10 @@ class TimeEntryReport extends React.Component {
   }
 
   render = () => {
-    const { tabId, data, userFullName } = this.state;
+    const { tabId, data, userFullName, startDate, endDate } = this.state;
     return (
       <div>
-        <ReportDetails name={userFullName} />
+        <ReportDetails name={userFullName} startDate={startDate} endDate={endDate} />
         <Tabs>
           <Tab
             id={TAB_DASHBOARD}
