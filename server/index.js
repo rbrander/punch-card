@@ -11,7 +11,11 @@ app.post('/time_entry', (req, resp, next) => {
 });
 
 app.get('/report', (req, resp, next) => {
-  resp.sendStatus(200);
+  const data = readData();
+
+  resp
+    .status(200)
+    .json(data);
 });
 
 app.listen(PORT, () => {
