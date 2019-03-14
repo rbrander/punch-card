@@ -19,6 +19,8 @@ class TimeEntryReport extends React.Component {
     tabId: TAB_DASHBOARD,
     data: [],
     userFullName: `${this.props.sdk.user.firstName} ${this.props.sdk.user.lastName}`,
+    avatarUrl: this.props.sdk.user.avatarUrl,
+    roles: this.props.sdk.user.spaceMembership.roles.map(role => role.name).join(', '),
     startDate: 'Feb 28, 2019',
     endDate: 'Mar 14, 2019'
   }
@@ -33,13 +35,20 @@ class TimeEntryReport extends React.Component {
     fetch(url)
       .then(response => response.json())
       .then(data => this.setState({ data }));
+    console.log(this.props.sdk.user.spaceMembership);
   }
 
   render = () => {
-    const { tabId, data, userFullName, startDate, endDate } = this.state;
+    const { tabId, data, userFullName, avatarUrl, roles, startDate, endDate } = this.state;
     return (
       <div>
-        <ReportDetails name={userFullName} startDate={startDate} endDate={endDate} />
+        <ReportDetails
+          name={userFullName}
+          roles={roles}
+          avatarUrl={avatarUrl}
+          startDate={startDate}
+          endDate={endDate}
+        />
         <Tabs>
           <Tab
             id={TAB_DASHBOARD}
