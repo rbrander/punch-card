@@ -10,7 +10,7 @@ function appendData(obj) {
 
   data.push(obj);
 
-  writeFileSync(JSON.stringify(data));
+  writeFileSync(DATA_FILE, JSON.stringify(data));
 
   return obj;
 }

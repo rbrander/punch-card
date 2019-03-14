@@ -1,12 +1,20 @@
+// Dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
 const { appendData, readData } = require('./utils');
+const TimeEntry = require('./time-entry');
 
+// App specific
 const app = express();
-
 const PORT = 8080;
 
+// Middleware for parsing body string into JSON object
+app.use(bodyParser.json());
+
+// Handler for accepting new time entry data
 app.post('/time_entry', (req, resp, next) => {
+  const timeEntry = new TimeEntry(req.body);
+  appendData(timeEntry);
   resp.sendStatus(200);
 });
 
