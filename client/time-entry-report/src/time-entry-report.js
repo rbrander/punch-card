@@ -1,10 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, TabPanel, Tabs } from '@contentful/forma-36-react-components';
+import ReportDetails from './report-details';
+import Dashboard from './dashboard';
+import DailyView from './daily-view';
+import EntryView from './entry-view';
+
+const TAB_DASHBOARD = 'dashboard';
+const TAB_DAILY_VIEW = 'daily-view';
+const TAB_ENTRY_VIEW = 'entry-view';
 
 class TimeEntryReport extends React.Component {
+  static propTypes = {
+    sdk: PropTypes.object.isRequired,
+  };
+
   state = {
-    tabId: 'dashboard'
+    tabId: TAB_DASHBOARD
   }
 
   selectTab = tabId => {
@@ -13,50 +25,65 @@ class TimeEntryReport extends React.Component {
     })
   }
 
-  render() {
+  componentDidMount = () => {
+    const { spaceID, environment } = this.props;
+    const host = 'http://localhost:8080';
+    const queryString = `?spaceID=${spaceID}&environment=${environment}`;
+    const url = `${host}/report${queryString}`;
+    /*
+    fetch(url)
+      .then(response => {
+        console.log('response:', response);
+      })
+    */
+  }
+
+  render = () => {
+    const { tabId } = this.state;
     return (
       <div>
+        <ReportDetails />
         <Tabs>
           <Tab
-            id='dashboard'
-            selected={this.state.tabId === 'dashboard'}
-            onSelect={() => this.selectTab('dashboard')}
+            id={TAB_DASHBOARD}
+            selected={tabId === TAB_DASHBOARD}
+            onSelect={() => this.selectTab(TAB_DASHBOARD)}
           >
             Dashboard
           </Tab>
           <Tab
-            id='daily'
-            selected={this.state.tabId === 'daily'}
-            onSelect={() => this.selectTab('daily')}
+            id={TAB_DAILY_VIEW}
+            selected={tabId === TAB_DAILY_VIEW}
+            onSelect={() => this.selectTab(TAB_DAILY_VIEW)}
           >
-            Daily
+            Daily View
           </Tab>
           <Tab
-            id='graphs'
-            selected={this.state.tabId === 'graphs'}
-            onSelect={() => this.selectTab('graphs')}
+            id={TAB_ENTRY_VIEW}
+            selected={tabId === TAB_ENTRY_VIEW}
+            onSelect={() => this.selectTab(TAB_ENTRY_VIEW)}
           >
-            Overview
+            Entry View
           </Tab>
         </Tabs>
         {
-          this.state.tabId === 'dashboard' && (
-            <TabPanel id='dashboard'>
-              <h1>Dashboard</h1>
+          tabId === TAB_DASHBOARD && (
+            <TabPanel id={TAB_DASHBOARD}>
+              <Dashboard />
             </TabPanel>
           )
         }
         {
-          this.state.tabId === 'daily' && (
-            <TabPanel id='daily'>
-              <h1>Daily</h1>
+          tabId === TAB_DAILY_VIEW && (
+            <TabPanel id={TAB_DAILY_VIEW}>
+              <DailyView />
             </TabPanel>
           )
         }
         {
-          this.state.tabId === 'graphs' && (
-            <TabPanel id='graphs'>
-              <h1>Graphs</h1>
+          tabId === TAB_ENTRY_VIEW && (
+            <TabPanel id={TAB_ENTRY_VIEW}>
+              <EntryView />
             </TabPanel>
           )
         }
@@ -64,9 +91,5 @@ class TimeEntryReport extends React.Component {
     );
   }
 }
-
-TimeEntryReport.propTypes = {
-  sdk: PropTypes.object.isRequired
-};
 
 export default TimeEntryReport;
