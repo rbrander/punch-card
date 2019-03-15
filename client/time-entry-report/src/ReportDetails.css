@@ -1,0 +1,12 @@
+.report-details__container {
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.report-details__avatar {
+  padding: 5px;
+  border-radius: 40px;
+  width: 40px;
+  height: 40px;
+  float: right;
+}

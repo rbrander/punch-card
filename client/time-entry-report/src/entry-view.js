@@ -9,7 +9,7 @@ import {
   TextField
 } from '@contentful/forma-36-react-components';
 import Utils from './utils';
-import './entry-view.css';
+import './EntryView.css';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
 
@@ -73,7 +73,7 @@ class EntryView extends React.Component {
     const { data, sortColumn, sortDirection } = this.state;
     const sortIcon = sortDirection === 'ascending' ? 'ChevronDown' : 'ChevronUp';
     return (
-      <div className="container">
+      <div className="entry-view__container">
         <TextField
           name="search"
           id="search"
@@ -85,19 +85,19 @@ class EntryView extends React.Component {
         <Table>
           <TableHead isSticky>
             <TableRow>
-              <TableCell extraClassNames="pointer" onClick={() => this.sortBy(SORTBY_ENTRY)}>
+              <TableCell extraClassNames="entry-view__pointer" onClick={() => this.sortBy(SORTBY_ENTRY)}>
                 Entry 
                 {sortColumn === SORTBY_ENTRY &&
                   <Icon icon={sortIcon} />
                 }
               </TableCell>
-              <TableCell extraClassNames="pointer" onClick={() => this.sortBy(SORTBY_DATE)}>
+              <TableCell extraClassNames="entry-view__pointer" onClick={() => this.sortBy(SORTBY_DATE)}>
                 When 
                 {sortColumn === SORTBY_DATE &&
                   <Icon icon={sortIcon} />
                 }
               </TableCell>
-              <TableCell extraClassNames="pointer" onClick={() => this.sortBy(SORTBY_DURATION)}>
+              <TableCell extraClassNames="entry-view__pointer" onClick={() => this.sortBy(SORTBY_DURATION)}>
                 Duration 
                 {sortColumn === SORTBY_DURATION &&
                   <Icon icon={sortIcon} />
