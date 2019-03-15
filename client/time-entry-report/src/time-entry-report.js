@@ -85,7 +85,7 @@ class TimeEntryReport extends React.Component {
     const { tabId, data, userFullName, avatarUrl, roles, startDate, endDate, isLoading } = this.state;
     return (
       <div className='TimeEntryReport__container'>
-      { isLoading && <Spinner /> }
+      { isLoading && <div className="TimeEntryReport__loading"><Spinner /></div> }
       { !isLoading &&
         <React.Fragment>
           <ReportDetails
