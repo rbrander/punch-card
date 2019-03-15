@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import { Button, Heading, HelpText } from '@contentful/forma-36-react-components';
+import { Button, Heading, HelpText, Checkbox } from '@contentful/forma-36-react-components';
 import { init } from './uie-sdk-hackathon-build.js';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -95,16 +95,18 @@ class App extends React.Component {
     if (this.state.running) {
       return (
         <div>
-          <HelpText>
-            Your time has started ticking!{' '}
-            <span
-              style={{ cursor: 'wait' }}
-              onMouseEnter={() => this.setState({ isVisible: true })}
-              onMouseLeave={() => this.setState({ isVisible: false })}
-            >
-              ({this.state.isVisible ? formatTimer(this.state.timer) : 'show time'})
+          <div style={{ paddingBottom: 10 }}>
+            <HelpText>
+              Your time has started ticking!{' '} <br />
+              <span
+                style={{ cursor: 'wait', fontSize: 14, fontWeight: 'bold' }}
+                onMouseEnter={() => this.setState({ isVisible: true })}
+                onMouseLeave={() => this.setState({ isVisible: false })}
+              >
+                {this.state.isVisible ? formatTimer(this.state.timer) : 'Show Time'}
             </span>
-          </HelpText>
+            </HelpText>
+          </div>
           <Button onClick={this.onStop} isFullWidth={true}>Stop</Button>
           {this.state.history.length > 0 && <Chart data={this.state.history} />}
           <Button buttonType="muted" onClick={this.onClick} isFullWidth={true}>Open Punchcard™</Button>
