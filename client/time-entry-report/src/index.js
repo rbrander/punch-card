@@ -31,8 +31,8 @@ class App extends React.Component {
       return (
         <TimeEntryReport
           sdk={this.props.sdk}
-          spaceID="5nguzj3e9yeb"
-          environment="master"
+          spaceId="5nguzj3e9yeb"
+          environmentId="master"
         />
       );
     }

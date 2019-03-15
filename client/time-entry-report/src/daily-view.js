@@ -1,47 +1,64 @@
 import React from 'react';
-import { Icon } from '@contentful/forma-36-react-components';
+import { Icon, Table, TableHead, TableBody, TableRow, TableCell } from '@contentful/forma-36-react-components';
 import './Daily.css';
+import { groupData } from './utils';
+import moment from 'moment';
+import momentDurationFormatSetup from 'moment-duration-format';
 
-const dates = [
-  {
-    id: '20190315',
-    name: 'March 15, 2019'
-  },
-  {
-    id: '20190314',
-    name: 'March 14, 2019'
-  },
-  {
-    id: '20190313',
-    name: 'March 13, 2019'
-  },
-  {
-    id: '20190312',
-    name: 'March 12, 2019'
-  },
-  {
-    id: '20190311',
-    name: 'March 11, 2019'
-  },
-  {
-    id: '20190310',
-    name: 'March 10, 2019'
-  },
-  {
-    id: '20190309',
-    name: 'March 9, 2019'
-  },
-]
+momentDurationFormatSetup(moment);
 
 export default class DailyView extends React.Component {
+  state = {
+    detailVisible: null
+  }
+
+  toggleDateDetailView = dateId => {
+    if (this.state.detailVisible === dateId) {
+      this.setState({
+        detailVisible: null
+      })
+    } else {
+      this.setState({
+        detailVisible: dateId
+      })
+    }
+  }
+
   render() {
+    const { data } = this.props;
+
+    const groupedData = groupData(data);
+
     return (
       <div>
-        { dates.map(date => (
+        { Object.entries(groupedData).map(([date, data]) => (
           <React.Fragment>
-            <div className='Daily__date' date={date.id}>
-              <Icon icon='ChevronRight' />
-              {date.name}
+            <div className='Daily__date' date={date} onClick={() => this.toggleDateDetailView(date)}>
+            <div>
+              { this.state.detailVisible !== date && <Icon icon='ChevronRight' /> }
+              { this.state.detailVisible === date && <Icon icon='ChevronDown' /> }
+              {date}
+              </div>
+              {
+                this.state.detailVisible === date && (
+                    <Table extraClassNames='Daily__table'>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Entry</TableCell>
+                          <TableCell>Time</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                      { Object.entries(data).map(([entryId, timeInSeconds]) => (
+                        <TableRow>
+                          <TableCell>{entryId}</TableCell>
+                          <TableCell>{moment.duration(timeInSeconds, 'seconds').format('h [hrs], m [min]')}</TableCell>
+                        </TableRow>
+                      ))}
+                      </TableBody>
+                    </Table>
+                )
+              }
             </div>
           </React.Fragment>
         ))}

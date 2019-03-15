@@ -6,6 +6,8 @@ import Dashboard from './dashboard';
 import DailyView from './daily-view';
 import EntryView from './entry-view';
 
+import './TimeEntryReport.css';
+
 const TAB_DASHBOARD = 'dashboard';
 const TAB_DAILY_VIEW = 'daily-view';
 const TAB_ENTRY_VIEW = 'entry-view';
@@ -22,26 +24,28 @@ class TimeEntryReport extends React.Component {
     avatarUrl: this.props.sdk.user.avatarUrl,
     roles: this.props.sdk.user.spaceMembership.roles.map(role => role.name).join(', '),
     startDate: 'Feb 28, 2019',
-    endDate: 'Mar 14, 2019'
+    endDate: 'Mar 14, 2019',
+    isLoading: true
   }
 
   selectTab = tabId => this.setState({ tabId })
 
   componentDidMount = () => {
-    const { spaceID, environment, sdk } = this.props;
+    const { spaceId, environmentId, sdk } = this.props;
     const host = 'http://localhost:8080';
-    const queryString = `?spaceId=${spaceID}&environment=${environment}`;
+    const queryString = `?spaceId=${spaceId}&environmentId=${environmentId}`;
     const url = `${host}/report${queryString}`;
     fetch(url)
       .then(response => response.json())
-      .then(data => this.setState({ data }));
+      .then(data => this.setState({ data }))
+      .then(() => this.setState({ isLoading: false }));
     console.log(this.props.sdk.user.spaceMembership);
   }
 
   render = () => {
     const { tabId, data, userFullName, avatarUrl, roles, startDate, endDate } = this.state;
     return (
-      <div>
+      <div className='TimeEntryReport__container'>
         <ReportDetails
           name={userFullName}
           roles={roles}
@@ -49,7 +53,7 @@ class TimeEntryReport extends React.Component {
           startDate={startDate}
           endDate={endDate}
         />
-        <Tabs>
+        <Tabs extraClassNames='TimeEntryReport__tabs'>
           <Tab
             id={TAB_DASHBOARD}
             selected={tabId === TAB_DASHBOARD}
@@ -82,7 +86,7 @@ class TimeEntryReport extends React.Component {
         {
           tabId === TAB_DAILY_VIEW && (
             <TabPanel id={TAB_DAILY_VIEW}>
-              <DailyView />
+              <DailyView data={data} />
             </TabPanel>
           )
         }
