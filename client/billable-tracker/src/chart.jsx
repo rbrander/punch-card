@@ -15,7 +15,7 @@ export default class Chart extends React.Component {
 
     const sortedArray = this.props.data.sort((a, b) => new Moment(a.date).format('YYYYMMDD') - new Moment(b.date).format('YYYYMMDD'))
 
-    let myChart = echarts.init(this.chart.current);
+    let myChart = echarts.init(this.chart.current, 'macarons');
 
     // specify chart configuration item and data
     let option = {
@@ -23,6 +23,7 @@ export default class Chart extends React.Component {
         top: 30,
         bottom: 50
       },
+      color: ['#429E9D'],
       animation: false,
       tooltip: {},
       legend: {
@@ -54,10 +55,10 @@ export default class Chart extends React.Component {
 
   render = () => {
     return (
-      <div>
+      <div style={{ paddingBottom: 20 }}>
         <div
           ref={this.chart}
-          style={{ height: 200}}
+          style={{ height: 200 }}
         >
         </div >
         <div style={{ textAlign: "center" }}>
