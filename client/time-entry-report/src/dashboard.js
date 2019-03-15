@@ -13,6 +13,8 @@ export default class Dashboard extends React.Component {
     // TODO: Top 5 entries?
     const dataSet = Object.entries(groupDataByEntry(data));
 
+    console.log(dataSet)
+
     const pieChartInstance = echarts.init(this.pieChartRef, null, {
       renderer: 'canvas'
     });
@@ -69,7 +71,7 @@ export default class Dashboard extends React.Component {
             <Paragraph>{formatSecondsAsTime(totalTime)}</Paragraph>
           </Card>
           <Card extraClassNames='Dashboard__card'>
-            <SectionHeading>Avg time</SectionHeading>
+            <SectionHeading>Average time</SectionHeading>
             <Paragraph>{formatSecondsAsTime(medianValue)}</Paragraph>
           </Card>
           <Card extraClassNames='Dashboard__card'>
