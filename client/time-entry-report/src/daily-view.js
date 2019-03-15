@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Table, TableHead, TableBody, TableRow, TableCell } from '@contentful/forma-36-react-components';
+import { Icon, Table, TableHead, TableBody, TableRow, TableCell, Subheading } from '@contentful/forma-36-react-components';
 import './Daily.css';
 import { groupData } from './utils';
 import moment from 'moment';
@@ -33,11 +33,13 @@ export default class DailyView extends React.Component {
       <div>
         { Object.entries(groupedData).map(([date, data]) => (
           <React.Fragment>
-            <div className='Daily__date' date={date} onClick={() => this.toggleDateDetailView(date)}>
+            <div className="Daily__date" onClick={() => this.toggleDateDetailView(date)}>
             <div>
-              { this.state.detailVisible !== date && <Icon icon='ChevronRight' /> }
-              { this.state.detailVisible === date && <Icon icon='ChevronDown' /> }
-              {date}
+              <Subheading>
+                { this.state.detailVisible !== date && <Icon icon='ChevronRight' /> }
+                { this.state.detailVisible === date && <Icon icon='ChevronDown' /> }
+                {date}
+              </Subheading>
               </div>
               {
                 this.state.detailVisible === date && (
