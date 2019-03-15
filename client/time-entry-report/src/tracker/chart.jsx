@@ -10,6 +10,9 @@ export default class Chart extends React.Component {
   };
 
   componentDidMount = () => {
+    console.log(this.chart.current)
+    console.log(Object.keys(this.props.data))
+
     const sortedArray = this.props.data.sort((a, b) => new Moment(a.date).format('YYYYMMDD') - new Moment(b.date).format('YYYYMMDD'))
 
     let myChart = echarts.init(this.chart.current, 'macarons');
@@ -41,7 +44,7 @@ export default class Chart extends React.Component {
         name: 'Time',
         type: 'line',
         data: sortedArray.map((entry) => {
-          return entry.count
+          return Math.floor(entry.count / 60)
         })
       }]
     };
