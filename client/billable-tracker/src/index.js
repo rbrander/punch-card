@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Button, Heading, HelpText } from '@contentful/forma-36-react-components';
-import { init } from 'contentful-ui-extensions-sdk';
+import { init } from './uie-sdk-hackathon-build.js';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
 import moment from 'moment'
 import { BASE_URL } from './constants'
 import { formatTimer } from './util'
+import debounce from 'lodash.debounce';
 
+const ACTIVITY_DEBOUNCE_TIME = 500;
 
 class App extends React.Component {
   static propTypes = {
@@ -27,6 +29,12 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchHistory();
+    this.setupActivityListener();
+    this.props.sdk.window.startAutoResizer();
+  }
+
+  fetchHistory() {
     let url = new URL(`${BASE_URL}/report`),
       params = { userId: this.props.sdk.user.sys.id, entryId: this.props.sdk.entry.getSys().id }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -52,20 +60,36 @@ class App extends React.Component {
       .catch(error => {
         console.log(`Oops. ${error}`)
       })
-    this.props.sdk.window.startAutoResizer();
+  }
+
+  setupActivityListener () {
+    const listener = isActive => {
+      if (isActive && !this.state.running) {
+        this.onStart();
+      } else if (!isActive && this.state.running) {
+        this.onStop();
+      }
+    };
+
+    this.props.sdk.entry.onEditorActivityChanged(
+      debounce(listener, ACTIVITY_DEBOUNCE_TIME, { leading: false, trailing: true })
+    )
   }
 
   render = () => {
     if (this.state.running) {
       return (
         <div>
-          <HelpText>Your time has started ticking!</HelpText>
-          <Button icon="InfoCircle" buttonType="positive" onClick={this.toggleVisibility} isFullWidth={true}>Show/Hide Time</Button>
-          {
-            this.state.isVisible && (
-              <Heading>{formatTimer(this.state.timer)}</Heading>
-            )
-          }
+          <HelpText>
+            Your time has started ticking!{' '}
+            <span
+              style={{cursor: 'wait'}}
+              onMouseEnter={() => this.setState({ isVisible: true })}
+              onMouseLeave={() => this.setState({ isVisible: false })}
+            >
+              ({this.state.isVisible ? formatTimer(this.state.timer) : 'show time'})
+            </span>
+          </HelpText>
           <Button onClick={this.onStop} isFullWidth={true}>Stop</Button>
         </div >
       )
@@ -102,18 +126,11 @@ class App extends React.Component {
     })
     this.setState({ running: false, timer: 0, isVisible: false })
   }
-
-  toggleVisibility = () => {
-    const { isVisible } = this.state;
-    this.setState({ isVisible: !isVisible })
-  }
 }
 
 init(sdk => {
   ReactDOM.render(<App sdk={sdk} />, document.getElementById('root'));
 });
-
-
 
 // Enabling hot reload
 if (module.hot) {
