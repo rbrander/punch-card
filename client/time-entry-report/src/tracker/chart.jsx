@@ -2,6 +2,7 @@ import React from 'react'
 import echarts from 'echarts'
 import Moment from 'moment'
 import { HelpText } from '@contentful/forma-36-react-components';
+import { COLOR_PALETTE } from '../constants';
 
 export default class Chart extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class Chart extends React.Component {
         top: 30,
         bottom: 50
       },
-      color: ['#429E9D'],
+      color: COLOR_PALETTE,
       animation: false,
       tooltip: {},
       legend: {

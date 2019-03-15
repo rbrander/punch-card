@@ -36,7 +36,7 @@ const sortMethods = {
 
 class EntryView extends React.Component {
   state= {
-    sortDirection: 'descending',
+    sortDirection: 'ascending',
     sortColumn: SORTBY_DATE,
     data: [...this.props.data] // clone the data array so we can mutate it via sorting
   }
@@ -86,19 +86,19 @@ class EntryView extends React.Component {
           <TableHead isSticky>
             <TableRow>
               <TableCell extraClassNames="entry-view__pointer" onClick={() => this.sortBy(SORTBY_ENTRY)}>
-                Entry 
+                Entry
                 {sortColumn === SORTBY_ENTRY &&
                   <Icon icon={sortIcon} />
                 }
               </TableCell>
               <TableCell extraClassNames="entry-view__pointer" onClick={() => this.sortBy(SORTBY_DATE)}>
-                When 
+                When
                 {sortColumn === SORTBY_DATE &&
                   <Icon icon={sortIcon} />
                 }
               </TableCell>
               <TableCell extraClassNames="entry-view__pointer" onClick={() => this.sortBy(SORTBY_DURATION)}>
-                Duration 
+                Duration
                 {sortColumn === SORTBY_DURATION &&
                   <Icon icon={sortIcon} />
                 }
@@ -110,7 +110,7 @@ class EntryView extends React.Component {
               <TableRow key={idx}>
                 <TableCell>{entryName}</TableCell>
                 <TableCell>{moment(when).format('MMM D YYYY @ H:mm:ss A')}</TableCell>
-                <TableCell>{moment.duration(timeInSeconds, 'seconds').format('h [hrs], m [min]')}</TableCell>
+                <TableCell>{moment.duration(timeInSeconds, 'seconds').format('h [hrs], m [min], s [sec]')}</TableCell>
               </TableRow>
             ))}
           </TableBody>
