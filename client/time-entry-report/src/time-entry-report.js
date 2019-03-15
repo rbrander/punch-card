@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tab, TabPanel, Tabs } from '@contentful/forma-36-react-components';
+import { Tab, TabPanel, Tabs, Spinner } from '@contentful/forma-36-react-components';
 import ReportDetails from './report-details';
 import Dashboard from './dashboard';
 import DailyView from './daily-view';
 import EntryView from './entry-view';
+import { uniq } from 'lodash';
 
 import './TimeEntryReport.css';
 
@@ -25,78 +26,122 @@ class TimeEntryReport extends React.Component {
     roles: this.props.sdk.user.spaceMembership.roles.map(role => role.name).join(', '),
     startDate: 'Feb 28, 2019',
     endDate: 'Mar 14, 2019',
-    isLoading: true
+    isLoading: true,
+    error: false
   }
 
   selectTab = tabId => this.setState({ tabId })
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const { spaceId, environmentId, sdk } = this.props;
     const host = 'http://localhost:8080';
     const queryString = `?spaceId=${spaceId}&environmentId=${environmentId}`;
     const url = `${host}/report${queryString}`;
-    fetch(url)
-      .then(response => response.json())
-      .then(data => this.setState({ data }))
-      .then(() => this.setState({ isLoading: false }));
+
+    let data;
+
+    try {
+      const resp = await fetch(url);
+      data = await resp.json();
+    } catch (e) {
+      this.setState({
+        error: true
+      });
+
+      return;
+    }
+
+    // Get all entry IDs and content types
+    const entryIds = uniq(data.map(datum => datum.entryId));
+    const [{ items: contentTypes }, { items: entries }] = await Promise.all([
+      sdk.space.getContentTypes(),
+      sdk.space.getEntries({
+        'sys.id[in]': entryIds.join(',')
+      })
+    ]);
+
+    // Correlate the content type displayField with the entry content type
+    data = data.map(datum => {
+      const entry = entries.find(e => e.sys.id === datum.entryId);
+      const { sys: { contentType: { sys: { id: contentTypeId } } } } = entry;
+      const { displayField } = contentTypes.find(ct => ct.sys.id === contentTypeId);
+
+      // NOTE: In reality we would need to know the real default locale, because
+      // this is coming from the CMA. Since the default locale is `en-US` if none
+      // is set, we use that here.
+      datum.entryName = entry.fields[displayField]['en-US'];
+
+      return datum;
+    });
+
+    this.setState({
+      data,
+      isLoading: false
+    });
+
     console.log(this.props.sdk.user.spaceMembership);
   }
 
   render = () => {
-    const { tabId, data, userFullName, avatarUrl, roles, startDate, endDate } = this.state;
+    const { tabId, data, userFullName, avatarUrl, roles, startDate, endDate, isLoading } = this.state;
     return (
       <div className='TimeEntryReport__container'>
-        <ReportDetails
-          name={userFullName}
-          roles={roles}
-          avatarUrl={avatarUrl}
-          startDate={startDate}
-          endDate={endDate}
-        />
-        <Tabs extraClassNames='TimeEntryReport__tabs'>
-          <Tab
-            id={TAB_DASHBOARD}
-            selected={tabId === TAB_DASHBOARD}
-            onSelect={() => this.selectTab(TAB_DASHBOARD)}
-          >
-            Dashboard
-          </Tab>
-          <Tab
-            id={TAB_DAILY_VIEW}
-            selected={tabId === TAB_DAILY_VIEW}
-            onSelect={() => this.selectTab(TAB_DAILY_VIEW)}
-          >
-            Daily View
-          </Tab>
-          <Tab
-            id={TAB_ENTRY_VIEW}
-            selected={tabId === TAB_ENTRY_VIEW}
-            onSelect={() => this.selectTab(TAB_ENTRY_VIEW)}
-          >
-            Entry View
-          </Tab>
-        </Tabs>
-        {
-          tabId === TAB_DASHBOARD && (
-            <TabPanel id={TAB_DASHBOARD}>
-              <Dashboard />
-            </TabPanel>
-          )
-        }
-        {
-          tabId === TAB_DAILY_VIEW && (
-            <TabPanel id={TAB_DAILY_VIEW}>
-              <DailyView data={data} />
-            </TabPanel>
-          )
-        }
-        {
-          tabId === TAB_ENTRY_VIEW && (
-            <TabPanel id={TAB_ENTRY_VIEW}>
-              <EntryView data={data} />
-            </TabPanel>
-          )
-        }
+      { isLoading && <Spinner /> }
+      { !isLoading &&
+        <React.Fragment>
+          <ReportDetails
+            name={userFullName}
+            roles={roles}
+            avatarUrl={avatarUrl}
+            startDate={startDate}
+            endDate={endDate}
+          />
+          <Tabs extraClassNames='TimeEntryReport__tabs'>
+            <Tab
+              id={TAB_DASHBOARD}
+              selected={tabId === TAB_DASHBOARD}
+              onSelect={() => this.selectTab(TAB_DASHBOARD)}
+            >
+              Dashboard
+            </Tab>
+            <Tab
+              id={TAB_DAILY_VIEW}
+              selected={tabId === TAB_DAILY_VIEW}
+              onSelect={() => this.selectTab(TAB_DAILY_VIEW)}
+            >
+              Daily View
+            </Tab>
+            <Tab
+              id={TAB_ENTRY_VIEW}
+              selected={tabId === TAB_ENTRY_VIEW}
+              onSelect={() => this.selectTab(TAB_ENTRY_VIEW)}
+            >
+              Entry View
+            </Tab>
+          </Tabs>
+          {
+            tabId === TAB_DASHBOARD && (
+              <TabPanel id={TAB_DASHBOARD}>
+                <Dashboard />
+              </TabPanel>
+            )
+          }
+          {
+            tabId === TAB_DAILY_VIEW && (
+              <TabPanel id={TAB_DAILY_VIEW}>
+                <DailyView data={data} />
+              </TabPanel>
+            )
+          }
+          {
+            tabId === TAB_ENTRY_VIEW && (
+              <TabPanel id={TAB_ENTRY_VIEW}>
+                <EntryView data={data} />
+              </TabPanel>
+            )
+          }
+        </React.Fragment>
+      }
       </div>
     );
   }

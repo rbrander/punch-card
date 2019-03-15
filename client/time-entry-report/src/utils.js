@@ -8,10 +8,10 @@ export function groupData(data) {
       memo[day] = {};
     }
 
-    if (!memo[day][datum.entryId]) {
-      memo[day][datum.entryId] = datum.timeInSeconds;
+    if (!memo[day][datum.entryName]) {
+      memo[day][datum.entryName] = datum.timeInSeconds;
     } else {
-      memo[day][datum.entryId] = memo[day][datum.entryId] + datum.timeInSeconds
+      memo[day][datum.entryName] = memo[day][datum.entryName] + datum.timeInSeconds
     }
 
     return memo;
