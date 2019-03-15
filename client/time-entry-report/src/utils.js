@@ -17,9 +17,3 @@ export function groupData(data) {
     return memo;
   }, {});
 }
-
-const formatDate = (dateISOstring) => new Date(dateISOstring).toLocaleString();
-
-export default {
-  formatDate
-}

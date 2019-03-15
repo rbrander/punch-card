@@ -23,7 +23,7 @@ class TimeEntryReport extends React.Component {
     data: [],
     userFullName: `${this.props.sdk.user.firstName} ${this.props.sdk.user.lastName}`,
     avatarUrl: this.props.sdk.user.avatarUrl,
-    roles: this.props.sdk.user.spaceMembership.roles.map(role => role.name).join(', '),
+    roles: this.props.sdk.user.spaceMembership.roles.map(role => role.name),
     startDate: 'Feb 28, 2019',
     endDate: 'Mar 14, 2019',
     isLoading: true,
@@ -78,8 +78,6 @@ class TimeEntryReport extends React.Component {
       data,
       isLoading: false
     });
-
-    console.log(this.props.sdk.user.spaceMembership);
   }
 
   render = () => {

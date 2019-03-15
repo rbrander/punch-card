@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Icon,
   Table,
   TableHead,
   TableBody,
@@ -7,29 +8,107 @@ import {
   TableCell
 } from '@contentful/forma-36-react-components';
 import Utils from './utils';
+import './entry-view.css';
+import moment from 'moment';
+import momentDurationFormatSetup from 'moment-duration-format';
 
-const EntryView = ({ data }) => (
-  <div>
-    <h3>Entry View</h3>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Entry</TableCell>
-          <TableCell>When</TableCell>
-          <TableCell>Duration (seconds)</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data.map(({ entryId, when, timeInSeconds }, idx) => (
-          <TableRow key={idx}>
-            <TableCell>{entryId}</TableCell>
-            <TableCell>{Utils.formatDate(when)}</TableCell>
-            <TableCell>{timeInSeconds}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </div>
-);
+momentDurationFormatSetup(moment);
+
+// TODO: add search filter
+
+const SORTBY_DATE = 'when';
+const SORTBY_ENTRY = 'entry';
+const SORTBY_DURATION = 'duration';
+
+const sortMethods = {
+  [SORTBY_ENTRY]: dir => (a, b) =>
+    dir === 'ascending' ?
+      a.entryName.localeCompare(b.entryName) :
+      b.entryName.localeCompare(a.entryName),
+  [SORTBY_DATE]: dir => (a, b) =>
+    dir === 'ascending' ?
+      new Date(b.when).getTime() - new Date(a.when).getTime() :
+      new Date(a.when).getTime() - new Date(b.when).getTime(),
+  [SORTBY_DURATION]: dir => (a, b) =>
+    dir === 'ascending' ?
+      b.timeInSeconds - a.timeInSeconds :
+      a.timeInSeconds - b.timeInSeconds
+};
+
+class EntryView extends React.Component {
+  state= {
+    sortDirection: 'descending',
+    sortColumn: SORTBY_DATE,
+    data: [...this.props.data] // clone the data array so we can mutate it via sorting
+  }
+
+  componentDidMount = () => {
+    this.sortData();
+  }
+
+  sortData = () => {
+    const { data, sortColumn, sortDirection } = this.state;
+    const sortMethod = sortMethods[sortColumn](sortDirection);
+    this.setState({ data: [...data].sort(sortMethod) })
+  }
+
+  sortBy = (column) => {
+    let { sortColumn, sortDirection } = this.state;
+    if (sortColumn === column) {
+      // invert the sort direction
+      sortDirection = sortDirection === 'ascending' ? 'descending' : 'ascending';
+    } else {
+      sortDirection = 'ascending';
+    }
+    this.setState({ sortColumn: column, sortDirection }, this.sortData);
+  }
+
+  render() {
+    const { data, sortColumn, sortDirection } = this.state;
+    const sortIcon = sortDirection === 'ascending' ? 'ChevronDown' : 'ChevronUp';
+    return (
+      <div>
+        <h3>Entry View</h3>
+        <div>
+          <label htmlFor="txtSearch">Search:</label>
+          <input type="text" id="txtSearch" />
+        </div>
+        <Table>
+          <TableHead isSticky>
+            <TableRow>
+              <TableCell extraClassNames="pointer" onClick={() => this.sortBy(SORTBY_ENTRY)}>
+                Entry 
+                {sortColumn === SORTBY_ENTRY &&
+                  <Icon icon={sortIcon} />
+                }
+              </TableCell>
+              <TableCell extraClassNames="pointer" onClick={() => this.sortBy(SORTBY_DATE)}>
+                When 
+                {sortColumn === SORTBY_DATE &&
+                  <Icon icon={sortIcon} />
+                }
+              </TableCell>
+              <TableCell extraClassNames="pointer" onClick={() => this.sortBy(SORTBY_DURATION)}>
+                Duration 
+                {sortColumn === SORTBY_DURATION &&
+                  <Icon icon={sortIcon} />
+                }
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map(({ entryName, when, timeInSeconds }, idx) => (
+              <TableRow key={idx}>
+                <TableCell>{entryName}</TableCell>
+                <TableCell>{moment(when).format('MMM D YYYY @ H:mm:ss A')}</TableCell>
+                <TableCell>{moment.duration(timeInSeconds, 'seconds').format('h [hrs], m [min]')}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
+}
 
 export default EntryView;
