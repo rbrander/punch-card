@@ -19,7 +19,8 @@ class App extends React.Component {
   onClick = () => {
     this.props.sdk.dialogs.openExtension({
       id: 'time-entry-report',
-      title: 'Time Entry Report'
+      title: 'Time Entry Report',
+      width: 800
     });
   }
 

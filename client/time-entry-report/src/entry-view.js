@@ -5,7 +5,8 @@ import {
   TableHead,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
+  TextField
 } from '@contentful/forma-36-react-components';
 import Utils from './utils';
 import './entry-view.css';
@@ -13,8 +14,6 @@ import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
 
 momentDurationFormatSetup(moment);
-
-// TODO: add search filter
 
 const SORTBY_DATE = 'when';
 const SORTBY_ENTRY = 'entry';
@@ -63,16 +62,26 @@ class EntryView extends React.Component {
     this.setState({ sortColumn: column, sortDirection }, this.sortData);
   }
 
+  onChangeSearch = (e) => {
+    const searchString = e.target.value;
+    const filteredData = this.props.data
+      .filter(datum => datum.entryName.toLowerCase().includes(searchString.toLowerCase()));
+    this.setState({ data: filteredData }, this.sortData);
+  }
+
   render() {
     const { data, sortColumn, sortDirection } = this.state;
     const sortIcon = sortDirection === 'ascending' ? 'ChevronDown' : 'ChevronUp';
     return (
-      <div>
-        <h3>Entry View</h3>
-        <div>
-          <label htmlFor="txtSearch">Search:</label>
-          <input type="text" id="txtSearch" />
-        </div>
+      <div className="container">
+        <TextField
+          name="search"
+          id="search"
+          labelText="Search"
+          textInputProps={{ placeholder: 'Search...' }}
+          onChange={this.onChangeSearch}
+        />
+        <br />
         <Table>
           <TableHead isSticky>
             <TableRow>
