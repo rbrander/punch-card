@@ -107,7 +107,7 @@ class App extends React.Component {
           </HelpText>
           <Button onClick={this.onStop} isFullWidth={true}>Stop</Button>
           {this.state.history.length > 0 && <Chart data={this.state.history} />}
-          <Button buttonType="muted" onClick={this.onClick} isFullWidth={true}>Punchcard™</Button>
+          <Button buttonType="muted" onClick={this.onClick} isFullWidth={true}>Open Punchcard™</Button>
         </div >
       )
     } else {
@@ -115,7 +115,7 @@ class App extends React.Component {
         <div>
           <Button onClick={this.onStart} isFullWidth={true}>Start</Button>
           {this.state.history.length > 0 && <Chart data={this.state.history} />}
-          <Button buttonType="muted" onClick={this.onClick} isFullWidth={true}>Punchcard™</Button>
+          <Button buttonType="muted" onClick={this.onClick} isFullWidth={true}>Open Punchcard™</Button>
         </div>)
     }
   };
