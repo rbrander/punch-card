@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Button } from '@contentful/forma-36-react-components';
-import { init, locations } from 'contentful-ui-extensions-sdk';
+import { init, locations } from './uie-sdk-hackathon-build';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import TimeEntryReport from './time-entry-report';
+import Tracker from './tracker';
 import './index.css';
 
 class App extends React.Component {
@@ -39,11 +40,7 @@ class App extends React.Component {
     }
 
     // Now we know we are in the sidebar
-    return (
-      <Button buttonType="positive" isFullWidth={true} onClick={this.onClick}>
-        See Time Entry Report
-      </Button>
-    );
+    return (<Tracker sdk={this.props.sdk} />);
   };
 }
 
