@@ -9,6 +9,7 @@ import moment from 'moment'
 import { BASE_URL } from './constants'
 import { formatTimer } from './util'
 import debounce from 'lodash.debounce';
+import Chart from './chart'
 
 const ACTIVITY_DEBOUNCE_TIME = 500;
 
@@ -24,7 +25,7 @@ class App extends React.Component {
       isVisible: false,
       running: false,
       timer: 0,
-      history: {}
+      history: []
     }
   }
 
@@ -45,24 +46,38 @@ class App extends React.Component {
       .then((res) => {
         let aggregated = res
           .filter(entry => {
-            return moment(entry.when).isAfter(moment(new Date()).subtract(7, 'days'))
+            return moment(entry.when).isAfter(moment(new Date()).subtract(6, 'days'))
           })
           .reduce((acc, entry) => {
             let date = entry.when.split('T')[0]
             if (acc[date]) {
               acc[date] += entry.timeInSeconds
+            } else {
+              acc[date] = entry.timeInSeconds
             }
-            acc[date] = entry.timeInSeconds
             return acc
           }, {})
-        this.setState({ history: aggregated })
+        // check for all 7 days
+        for (let i = 0; i < 7; i++) {
+          let dateLabel = moment(new Date()).subtract(i, 'days')
+            .toISOString()
+            .split('T')[0]
+          if (!aggregated[dateLabel]) {
+            aggregated[dateLabel] = 0
+          }
+        }
+        let newData = Object.keys(aggregated).map((date) => {
+          return { date: date, count: aggregated[date] }
+        })
+        this.setState({ history: newData })
+        console.log(this.state.history)
       })
       .catch(error => {
         console.log(`Oops. ${error}`)
       })
   }
 
-  setupActivityListener () {
+  setupActivityListener() {
     const listener = isActive => {
       if (isActive && !this.state.running) {
         this.onStart();
@@ -83,7 +98,7 @@ class App extends React.Component {
           <HelpText>
             Your time has started ticking!{' '}
             <span
-              style={{cursor: 'wait'}}
+              style={{ cursor: 'wait' }}
               onMouseEnter={() => this.setState({ isVisible: true })}
               onMouseLeave={() => this.setState({ isVisible: false })}
             >
@@ -91,10 +106,15 @@ class App extends React.Component {
             </span>
           </HelpText>
           <Button onClick={this.onStop} isFullWidth={true}>Stop</Button>
+          {this.state.history.length > 0 && <Chart data={this.state.history} />}
         </div >
       )
     } else {
-      return (<Button onClick={this.onStart} isFullWidth={true}>Start</Button>)
+      return (
+        <div>
+          <Button onClick={this.onStart} isFullWidth={true}>Start</Button>
+          {this.state.history.length > 0 && <Chart data={this.state.history} />}
+        </div>)
     }
   };
 
@@ -121,9 +141,13 @@ class App extends React.Component {
         timeInSeconds: this.state.timer,
         entryId: this.props.sdk.entry.getSys().id
       })
-    }).catch(err => {
-      console.log(`Error posting time: ${err}`)
     })
+      .then(() => {
+        this.fetchHistory()
+      })
+      .catch(err => {
+        console.log(`Error posting time: ${err}`)
+      })
     this.setState({ running: false, timer: 0, isVisible: false })
   }
 }
