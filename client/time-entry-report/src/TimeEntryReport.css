@@ -2,14 +2,18 @@
   padding: 5px 10px 20px;
 }
 
-.TimeEntryReport__loading {
-  height: 100px;
-  margin-top: 50px;
-  text-align: center;
-}
-
 .TimeEntryReport__tabs {
   margin-top: 10px;
   border-top: 1px solid lightgrey;
   margin-bottom: 5px;
+}
+
+.TimeEntryReport__loading {
+  padding: 24px 12px;
+  display: flex;
+}
+
+.TimeEntryReport__loading-text {
+  display: inline-block;
+  margin: 9px 6px 12px 24px;
 }

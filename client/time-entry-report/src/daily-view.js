@@ -35,7 +35,7 @@ export default class DailyView extends React.Component {
           <React.Fragment>
             <div className="Daily__date" onClick={() => this.toggleDateDetailView(date)}>
             <div>
-              <Subheading>
+              <Subheading extraClassNames='Daily__subheading'>
                 { this.state.detailVisible !== date && <Icon icon='ChevronRight' /> }
                 { this.state.detailVisible === date && <Icon icon='ChevronDown' /> }
                 {date}
@@ -43,22 +43,22 @@ export default class DailyView extends React.Component {
               </div>
               {
                 this.state.detailVisible === date && (
-                    <Table extraClassNames='Daily__table'>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Entry</TableCell>
-                          <TableCell>Time</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                      { Object.entries(data).map(([entryId, timeInSeconds]) => (
-                        <TableRow>
-                          <TableCell>{entryId}</TableCell>
-                          <TableCell>{formatSecondsAsTime(timeInSeconds)}</TableCell>
-                        </TableRow>
-                      ))}
-                      </TableBody>
-                    </Table>
+                  <Table extraClassNames='Daily__table'>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Entry</TableCell>
+                        <TableCell>Time</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    { Object.entries(data).map(([entryId, timeInSeconds]) => (
+                      <TableRow>
+                        <TableCell>{entryId}</TableCell>
+                        <TableCell>{formatSecondsAsTime(timeInSeconds)}</TableCell>
+                      </TableRow>
+                    ))}
+                    </TableBody>
+                  </Table>
                 )
               }
             </div>

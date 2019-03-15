@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tab, TabPanel, Tabs, Spinner } from '@contentful/forma-36-react-components';
+import { Tab, TabPanel, Tabs, Spinner, Paragraph } from '@contentful/forma-36-react-components';
 import ReportDetails from './report-details';
 import Dashboard from './dashboard';
 import DailyView from './daily-view';
@@ -85,7 +85,12 @@ class TimeEntryReport extends React.Component {
     const { tabId, data, userFullName, avatarUrl, roles, startDate, endDate, isLoading } = this.state;
     return (
       <div className='TimeEntryReport__container'>
-      { isLoading && <div className="TimeEntryReport__loading"><Spinner /></div> }
+      { isLoading &&
+        <div className='TimeEntryReport__loading'>
+          <Spinner size='large' />
+          <Paragraph extraClassNames='TimeEntryReport__loading-text'>Loading your report...</Paragraph>
+        </div>
+      }
       { !isLoading &&
         <React.Fragment>
           <ReportDetails

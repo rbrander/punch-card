@@ -1,14 +1,22 @@
 .Daily__date {
-  padding: 10px 20px;
+  /*padding: 10px 20px;*/
   cursor: pointer;
   border: 1px solid #e5ebed;
   margin-bottom: 5px;
 }
 
-.Daily__date:hover {
+.Daily__subheading:hover {
   background-color: #f7f9fa;
 }
 
+.Daily__subheading {
+  padding: 10px 20px;
+  margin: 0;
+}
+
 .Daily__table {
-  margin-top: 10px;
+  margin: 10px 0 10px 5px;
+
+  /* Weird but necessary */
+  width: 99%;
 }
