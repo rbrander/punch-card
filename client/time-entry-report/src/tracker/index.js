@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Button, HelpText } from '@contentful/forma-36-react-components';
-import { init } from './uie-sdk-hackathon-build.js';
+import { init } from '../uie-sdk-hackathon-build';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
 import moment from 'moment'
@@ -13,7 +13,7 @@ import Chart from './chart'
 
 const ACTIVITY_DEBOUNCE_TIME = 500;
 
-class App extends React.Component {
+export default class Tracker extends React.Component {
   static propTypes = {
     sdk: PropTypes.object.isRequired,
   };
@@ -162,13 +162,4 @@ class App extends React.Component {
       width: 800
     });
   }
-}
-
-init(sdk => {
-  ReactDOM.render(<App sdk={sdk} />, document.getElementById('root'));
-});
-
-// Enabling hot reload
-if (module.hot) {
-  module.hot.accept();
 }
