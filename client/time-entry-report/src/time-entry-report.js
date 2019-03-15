@@ -34,8 +34,9 @@ class TimeEntryReport extends React.Component {
 
   componentDidMount = async () => {
     const { spaceId, environmentId, sdk } = this.props;
+    const userId = this.props.sdk.user.sys.id;
     const host = 'http://localhost:8080';
-    const queryString = `?spaceId=${spaceId}&environmentId=${environmentId}`;
+    const queryString = `?spaceId=${spaceId}&environmentId=${environmentId}&userId=${userId}`;
     const url = `${host}/report${queryString}`;
 
     let data;
