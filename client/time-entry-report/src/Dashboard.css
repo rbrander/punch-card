@@ -1,0 +1,16 @@
+.Dashboard__container {
+  display: flex;
+}
+
+.Dashboard__overview {
+  width: 40%;
+}
+
+.Dashboard__pie-chart {
+  width: 60%;
+}
+
+.Dashboard__card {
+  margin-top: 10px;
+  padding: 10px;
+}

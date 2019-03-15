@@ -121,7 +121,7 @@ class TimeEntryReport extends React.Component {
           {
             tabId === TAB_DASHBOARD && (
               <TabPanel id={TAB_DASHBOARD}>
-                <Dashboard />
+                <Dashboard data={data} />
               </TabPanel>
             )
           }

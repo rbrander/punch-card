@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon, Table, TableHead, TableBody, TableRow, TableCell, Subheading } from '@contentful/forma-36-react-components';
 import './Daily.css';
-import { groupData } from './utils';
+import { groupData, formatSecondsAsTime } from './utils';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
 
@@ -54,7 +54,7 @@ export default class DailyView extends React.Component {
                       { Object.entries(data).map(([entryId, timeInSeconds]) => (
                         <TableRow>
                           <TableCell>{entryId}</TableCell>
-                          <TableCell>{moment.duration(timeInSeconds, 'seconds').format('h [hrs], m [min]')}</TableCell>
+                          <TableCell>{formatSecondsAsTime(timeInSeconds)}</TableCell>
                         </TableRow>
                       ))}
                       </TableBody>
