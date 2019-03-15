@@ -24,8 +24,8 @@ class TimeEntryReport extends React.Component {
     userFullName: `${this.props.sdk.user.firstName} ${this.props.sdk.user.lastName}`,
     avatarUrl: this.props.sdk.user.avatarUrl,
     roles: this.props.sdk.user.spaceMembership.roles.map(role => role.name),
-    startDate: 'Feb 28, 2019',
-    endDate: 'Mar 14, 2019',
+    startDate: 'Mar 2, 2019',
+    endDate: 'Mar 15, 2019',
     isLoading: true,
     error: false
   }
