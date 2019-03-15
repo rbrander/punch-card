@@ -44,6 +44,7 @@ export default class Chart extends React.Component {
       series: [{
         name: 'Time',
         type: 'line',
+        smooth: true,
         data: sortedArray.map((entry) => {
           return Math.floor(entry.count / 60)
         })
