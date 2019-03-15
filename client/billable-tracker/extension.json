@@ -1,0 +1,6 @@
+{
+  "id": "billable-tracker",
+  "name": "billable-tracker",
+  "srcdoc": "./build/index.html",
+  "sidebar": true
+}
