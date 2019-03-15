@@ -2,6 +2,7 @@ import React from 'react';
 import echarts from 'echarts';
 import { Card, SectionHeading, Paragraph } from '@contentful/forma-36-react-components';
 import { groupDataByEntry, groupDataByDay, formatSecondsAsTime, truncate, median } from './utils';
+import { COLOR_PALETTE } from './constants';
 
 import './Dashboard.css';
 
@@ -20,6 +21,7 @@ export default class Dashboard extends React.Component {
       legend: {
         formatter: name => truncate(name)
       },
+      color: COLOR_PALETTE,
       dataset: {
         source: dataSet
       },

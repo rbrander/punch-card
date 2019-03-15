@@ -6,6 +6,7 @@ import Dashboard from './dashboard';
 import DailyView from './daily-view';
 import EntryView from './entry-view';
 import { uniq } from 'lodash';
+import moment from 'moment';
 
 import './TimeEntryReport.css';
 
@@ -74,6 +75,8 @@ class TimeEntryReport extends React.Component {
 
       return datum;
     });
+
+    data = data.sort((a, b) => new moment(b.when).format('YYYYMMDD') - new moment(a.when).format('YYYYMMDD'))
 
     this.setState({
       data,
